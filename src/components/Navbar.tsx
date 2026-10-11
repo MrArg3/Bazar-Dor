@@ -1,9 +1,9 @@
 import Link from "next/link";
+import type { Category } from "@/types/product.type";
 
 const Navbar = async () => {
     const res = await fetch('https://openapi.programming-hero.com/api/bazardor/categories');
-    const data = await res.json();
-    const navs = data;  
+    const navs: Category[] = await res.json();
     // console.log(navs);
     return (
         <div className="mx-auto w-full max-w-6xl p-3">
