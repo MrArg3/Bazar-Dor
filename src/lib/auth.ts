@@ -5,6 +5,22 @@ import { MongoClient } from "mongodb";
 const databaseUrl = process.env.BETTER_AUTH_DB_URL;
 const authSecret = process.env.BETTER_AUTH_SECRET;
 const authUrl = process.env.BETTER_AUTH_URL;
+const googleClientId = process.env.BETTER_AUTH_GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.BETTER_AUTH_GOOGLE_CLIENT_SECRET;
+const githubClientId = process.env.BETTER_AUTH_GITHUB_CLIENT_ID;
+const githubClientSecret = process.env.BETTER_AUTH_GITHUB_CLIENT_SECRET;
+
+if (Boolean(googleClientId) !== Boolean(googleClientSecret)) {
+    throw new Error(
+        "BETTER_AUTH_GOOGLE_CLIENT_ID and BETTER_AUTH_GOOGLE_CLIENT_SECRET must both be set.",
+    );
+}
+
+if (Boolean(githubClientId) !== Boolean(githubClientSecret)) {
+    throw new Error(
+        "BETTER_AUTH_GITHUB_CLIENT_ID and BETTER_AUTH_GITHUB_CLIENT_SECRET must both be set.",
+    );
+}
 
 if (!databaseUrl || !authSecret || !authUrl) {
     throw new Error(
@@ -32,19 +48,19 @@ export const auth = betterAuth({
         enabled: true,
     },
     socialProviders: {
-        ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+        ...(googleClientId && googleClientSecret
             ? {
                   google: {
-                      clientId: process.env.GOOGLE_CLIENT_ID,
-                      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                      clientId: googleClientId,
+                      clientSecret: googleClientSecret,
                   },
               }
             : {}),
-        ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+        ...(githubClientId && githubClientSecret
             ? {
                   github: {
-                      clientId: process.env.GITHUB_CLIENT_ID,
-                      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+                      clientId: githubClientId,
+                      clientSecret: githubClientSecret,
                   },
               }
             : {}),
