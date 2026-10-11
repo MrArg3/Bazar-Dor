@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import AuthForm from "@/components/auth/AuthForm";
 
 function getSafeRedirect(value: string | undefined) {
@@ -8,7 +9,7 @@ function getSafeRedirect(value: string | undefined) {
         : "/";
 }
 
-export default async function SignUpPage({
+async function SignUpContent({
     searchParams,
 }: {
     searchParams: Promise<{ callbackURL?: string }>;
@@ -16,4 +17,16 @@ export default async function SignUpPage({
     const { callbackURL } = await searchParams;
 
     return <AuthForm mode="sign-up" redirectTo={getSafeRedirect(callbackURL)} />;
+}
+
+export default function SignUpPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ callbackURL?: string }>;
+}) {
+    return (
+        <Suspense fallback={<div aria-busy="true" className="min-h-[60vh]" />}>
+            <SignUpContent searchParams={searchParams} />
+        </Suspense>
+    );
 }

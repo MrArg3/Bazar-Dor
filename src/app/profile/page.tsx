@@ -1,9 +1,10 @@
+import { Suspense } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import ProfileDetails from "@/components/auth/ProfileDetails";
 
-export default async function ProfilePage() {
+async function ProfileContent() {
     const session = await auth.api.getSession({ headers: await headers() });
 
     if (!session) {
@@ -18,5 +19,24 @@ export default async function ProfilePage() {
                 <ProfileDetails name={session.user.name} email={session.user.email} />
             </div>
         </section>
+    );
+}
+
+export default function ProfilePage() {
+    return (
+        <Suspense
+            fallback={
+                <section
+                    aria-busy="true"
+                    aria-label="প্রোফাইল লোড হচ্ছে"
+                    className="mx-auto my-10 w-full max-w-2xl space-y-5 px-4"
+                >
+                    <div className="h-24 animate-pulse rounded-xl bg-white" />
+                    <div className="h-56 animate-pulse rounded-xl bg-white" />
+                </section>
+            }
+        >
+            <ProfileContent />
+        </Suspense>
     );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound, redirect } from "next/navigation";
 import { headers } from "next/headers";
 import type { Product } from "@/types/product.type";
@@ -13,7 +14,7 @@ const unitLabelsBn: Record<Product["unit"], string> = {
     piece: "পিস",
 };
 
-export default async function ProductDetailsPage({
+async function ProductDetailsPageContent({
     params,
 }: {
     params: Promise<{ slug: string }>;
@@ -194,5 +195,29 @@ export default async function ProductDetailsPage({
                 )}
             </section>
         </section>
+    );
+}
+
+export default function ProductDetailsPage({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    return (
+        <Suspense
+            fallback={
+                <section
+                    aria-busy="true"
+                    aria-label="পণ্যের বিস্তারিত লোড হচ্ছে"
+                    className="mx-auto my-8 w-full max-w-6xl space-y-5 px-4"
+                >
+                    <div className="h-32 animate-pulse rounded-xl bg-white" />
+                    <div className="h-48 animate-pulse rounded-xl bg-white" />
+                    <div className="h-64 animate-pulse rounded-xl bg-white" />
+                </section>
+            }
+        >
+            <ProductDetailsPageContent params={params} />
+        </Suspense>
     );
 }

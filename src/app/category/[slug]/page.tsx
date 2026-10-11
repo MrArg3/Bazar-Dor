@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import CategoryProducts from "@/components/products/CategoryProducts";
 import type { Category, Product } from "@/types/product.type";
@@ -18,7 +19,7 @@ async function fetchApiData<T>(url: string, label: string): Promise<T> {
     return response.json() as Promise<T>;
 }
 
-export default async function CategoryPage({
+async function CategoryPageContent({
     params,
 }: {
     params: Promise<{ slug: string }>;
@@ -54,5 +55,32 @@ export default async function CategoryPage({
 
             <CategoryProducts products={products} />
         </section>
+    );
+}
+
+export default function CategoryPage({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    return (
+        <Suspense
+            fallback={
+                <section
+                    aria-busy="true"
+                    aria-label="পণ্য লোড হচ্ছে"
+                    className="mx-auto mt-6 w-full max-w-6xl space-y-4 px-4"
+                >
+                    <div className="h-16 animate-pulse rounded-xl bg-white" />
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        {[0, 1, 2].map((item) => (
+                            <div key={item} className="h-36 animate-pulse rounded-xl bg-white" />
+                        ))}
+                    </div>
+                </section>
+            }
+        >
+            <CategoryPageContent params={params} />
+        </Suspense>
     );
 }

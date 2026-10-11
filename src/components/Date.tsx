@@ -11,7 +11,11 @@ const getServerDate = () => "";
 const CurrentDate = () => {
     const date = useSyncExternalStore(subscribe, getDate, getServerDate);
 
-    return <p className="text-sm text-[#05893e] bg-[#e1f0e7] p-2 ">{date}</p>;
+    return (
+        <p className="inline-block rounded-2xl bg-[#e1f0e7] px-2 py-1 text-sm text-[#05893e]">
+            {date}
+        </p>
+    );
 };
 
 export default CurrentDate;
