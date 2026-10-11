@@ -42,11 +42,14 @@ export default async function CategoryPage({
 
     return (
         <section className="mx-auto mt-6 w-full max-w-6xl px-4">
-            <div className="mb-5">
-                <h1 className="text-2xl font-bold">
-                    <span aria-hidden="true">{category.icon}</span> {category.nameBn}
-                </h1>
-                <p className="text-sm text-gray-500">প্রতিটি পণ্যের আজকের দাম ও পরিবর্তন</p>
+            <div className="mb-5 flex items-center gap-3 rounded-xl bg-white p-3">
+
+                <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-gray-200 text-2xl" aria-hidden="true">{category.icon}</span>
+
+                <div>
+                    <h2 className="text-xl font-bold">{category.nameBn}</h2>
+                    <p className="text-sm text-gray-600">প্রতিটি পণ্যের আজকের দাম ও পরিবর্তন</p>
+                </div>
             </div>
 
             <CategoryProducts products={products} />

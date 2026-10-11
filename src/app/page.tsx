@@ -1,17 +1,6 @@
 import { Suspense } from "react";
-import Marquee from "@/components/Marquee";
 import Banner from "@/components/Banner";
 import Products from "@/components/products/products";
-
-function MarqueeFallback() {
-  return (
-    <div
-      aria-busy="true"
-      aria-label="বাজারের দাম লোড হচ্ছে"
-      className="h-10 border-b border-gray-200 bg-[#fafcfa]"
-    />
-  );
-}
 
 function ProductsFallback() {
   return (
@@ -40,9 +29,6 @@ function ProductsFallback() {
 export default function Home() {
   return (
    <div>
-      <Suspense fallback={<MarqueeFallback />}>
-        <Marquee/>
-      </Suspense>
       <Banner/>
       <Suspense fallback={<ProductsFallback />}>
         <Products/>

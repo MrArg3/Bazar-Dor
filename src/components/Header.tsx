@@ -1,12 +1,17 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import Navbar from "./Navbar";
-const Header = () => {
+import { auth } from "@/lib/auth";
+import AccountMenu from "@/components/auth/AccountMenu";
+
+const Header = async () => {
+    const session = await auth.api.getSession({ headers: await headers() });
     const date = new Date().toLocaleDateString("bn-BD",
         {
             dateStyle: "full",
         })
     return (
-        <header className=" sticky border-b border-gray-200 bg-[#fafcfa] p-2">
+        <header className="sticky top-0 z-[100] border-b border-gray-200 bg-[#fafcfa] p-2">
             <div className="  border-b border-gray-100">
                 <div className="mx-auto w-full max-w-6xl flex items-center justify-between gap-3 p-2">
                     {/* <div className="flex justify-between items-center p-4"> */}
@@ -24,8 +29,14 @@ const Header = () => {
                     </Link>
 
                     <div className="flex items-center gap-2">
-                        <Link href={"/"}><button className="text-gray-700 border border-gray-300 hover:bg-gray-200 rounded-lg p-2 font-bold">সাইন ইন</button></Link>
-                        <Link href={"/"}><button className="bg-green-700 hover:bg-green-600 text-white  font-bold rounded-lg p-2">সাইন আপ </button></Link>
+                        {session ? (
+                            <AccountMenu name={session.user.name} email={session.user.email} />
+                        ) : (
+                            <>
+                                <Link className="rounded-lg border border-gray-300 p-2 font-bold text-gray-700 hover:bg-gray-200" href="/sign-in">সাইন ইন</Link>
+                                <Link className="rounded-lg bg-green-700 p-2 font-bold text-white hover:bg-green-600" href="/sign-up">সাইন আপ</Link>
+                            </>
+                        )}
                     </div>
                     {/* </div> */}
 

@@ -1,14 +1,27 @@
 import type { Metadata } from "next";
 import { Hind_Siliguri } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Marquee from "@/components/Marquee";
+import { Toaster } from "react-hot-toast";
 
 const hindSiliguri = Hind_Siliguri({
   variable: "--font-hind-siliguri",
   weight: "300",
   subsets: ["bengali", "latin"],
 });
+
+function MarqueeFallback() {
+  return (
+    <div
+      aria-busy="true"
+      aria-label="বাজারের দাম লোড হচ্ছে"
+      className="h-10 border-b border-gray-200 bg-[#fafcfa]"
+    />
+  );
+}
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,15 +32,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="bn"
-      className={`${hindSiliguri.variable} h-full antialiased`}
+      className={`${hindSiliguri.variable} min-h-screen antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <Header/>
-        <main>
-        {children}
-        </main>
-        <Footer/>
-        </body>
+      <body className="min-h-screen flex flex-col bg-[#f0f5f0] text-slate-800">
+        <Toaster position="top-center" />
+        <Header />
+        <Suspense fallback={<MarqueeFallback />}>
+          <Marquee />
+        </Suspense>
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

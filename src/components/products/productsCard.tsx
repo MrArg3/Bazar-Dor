@@ -12,12 +12,17 @@ const unitLabelsBn: Record<string, string> = {
 
 const ProductsCard = ({ product }: { product: Product }) => {
     const unitBn = unitLabelsBn[product.unit] ?? product.unit;
+    const changeDir = product.change.dir;
+    const changeText = `${product.change.pct < 0 || Object.is(product.change.pct, -0) ? "-" : ""}${Math.abs(product.change.pct).toLocaleString('bn-BD', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+    })}%`;
 
     return (
         <Link href={`/product/${product.slug}`}>
             <div
                 key={product.id}
-                className="rounded-xl border border-gray-200 hover:border-[#05893e] hover:transition hover:shadow-md p-4 shadow-sm"
+                className="rounded-xl bg-gray-100 border border-gray-200 hover:border-[#05893e] hover:transition hover:shadow-md p-4 shadow-sm"
             >
                 <div className="flex items-start align-items gap-3">
                     <span aria-hidden="true" className="grid size-12 shrink-0 bg-gray-300 place-items-center rounded-xl bg-base-200 text-2xl">{product.image}</span>
@@ -35,15 +40,13 @@ const ProductsCard = ({ product }: { product: Product }) => {
 
                     </div>
 
-                    <span className={`mt-1 text-sm font-bold py-[2px] px-2 rounded-xl ${product.change.dir === 'up'
+                    <span className={`mt-1 text-sm font-bold py-[2px] px-2 rounded-xl ${changeDir === 'up'
                         ? 'text-[#d03739] bg-red-100'
-                        : product.change.dir === 'down'
+                        : changeDir === 'down'
                             ? 'text-[#1a9951] bg-[#e1f0e7]'
                             : 'text-gray-500 bg-gray-200'
                         }`} >
-                        {product.change.dir === 'up' ? '▲' : product.change.dir === 'down' ? '▼' : '-'}{' '}
-                        {product.change.dir != 'up' && product.change.dir != 'down' ? '০.' : ''}
-                        {Math.abs(product.change.pct).toLocaleString('bn-BD')}%
+                        {changeDir === 'up' ? '▲' : changeDir === 'down' ? '▼' : '−'} {changeText}
                     </span>
                 </div>
             </div>
